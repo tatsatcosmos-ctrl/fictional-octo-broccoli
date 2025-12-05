@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EduGuide — AI Learning Hub</title>
+  <meta name="description" content="AI Learning for students — Interactive, animated, modern UI with chatbot, Python runner, projects and learning paths." />
+
+  <!-- External libraries -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/typed.js@2.0.12"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <style>
+    :root{
+      --bg:#081126;--card:rgba(255,255,255,0.04);--muted:#9fb3bd;--accent1:#6ee7b7;--accent2:#60a5fa;
+      --glass:rgba(255,255,255,0.03);--glass-2:rgba(255,255,255,0.02)
+    }
+    *{box-sizing:border-box;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color: #e7f6f2}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#041028 0%, #081126 70%);-webkit-font-smoothing:antialiased}
+
+    /* Header */
+    header{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:linear-gradient(90deg,rgba(2,6,23,0.35),transparent);backdrop-filter:blur(6px);z-index:60}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent1),var(--accent2));font-weight:800;color:#04211a}
+    nav a{color:var(--muted);margin-left:18px;text-decoration:none;font-weight:600}
+
+    /* Hero */
+    .hero{padding:120px 20px 40px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:28px}
+    .hero-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:28px;border-radius:16px;box-shadow:0 10px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    h1{font-size:32px;margin:0 0 8px}
+    .lead{color:var(--muted);margin:0 0 18px}
+
+    .kicker{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent1));color:#05211a;font-weight:700;margin-bottom:12px}
+
+    /* typing */
+    .typing {font-weight:700;color:#dffcf1}
+
+    /* features */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .fcard{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+    .fcard h4{margin:0 0 6px}
+    .fcard p{margin:0;color:var(--muted);font-size:14px}
+
+    /* right column */
+    aside{position:relative}
+    .chat-wrapper{position:sticky;top:100px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 30px rgba(0,0,0,0.6);background:linear-gradient(180deg,var(--glass),transparent)}
+    .chat-header{padding:14px;border-bottom:1px solid rgba(255,255,255,0.02)}
+    iframe.chat{width:100%;height:520px;border:0;background:white}
+
+    /* floating chat bubble */
+    .chat-bubble{position:fixed;right:20px;bottom:20px;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent1),var(--accent2));box-shadow:0 8px 30px rgba(8,20,40,0.5);cursor:pointer;z-index:80}
+    .chat-bubble img{width:34px;height:34px}
+
+    /* sections */
+    .container{max-width:1200px;margin:20px auto;padding:0 20px}
+    .card{background:linear-gradient(180deg,var(--glass),transparent);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+
+    /* Python runner */
+    .python-run{display:flex;flex-direction:column;gap:10px}
+    textarea.editor{width:100%;height:220px;border-radius:10px;background:rgba(3,16,22,0.6);color:#e6f2f1;padding:12px;border:1px solid rgba(255,255,255,0.03);resize:vertical}
+    .run-row{display:flex;gap:10px;align-items:center}
+    button.btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));border:none;padding:10px 14px;border-radius:12px;color:#02120f;font-weight:700;cursor:pointer}
+    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    pre.output{background:linear-gradient(180deg,rgba(2,12,20,0.6),rgba(2,12,20,0.8));padding:12px;border-radius:8px;min-height:80px;color:#dff7ea}
+
+    /* gallery */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .gallery img{width:100%;height:160px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+
+    /* project cards */
+    .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+    .proj{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03)}
+    .proj h4{margin:0 0 8px}
+
+    /* footer */
+    footer{padding:36px 20px;text-align:center;color:var(--muted);margin-top:36px}
+
+    /* responsiveness */
+    @media (max-width:980px){.hero{grid-template-columns:1fr;}.features{grid-template-columns:repeat(2,1fr)}.projects{grid-template-columns:1fr}.gallery{grid-template-columns:repeat(2,1fr)}.chat-wrapper{position:relative;top:0}}
+    @media (max-width:600px){.features{grid-template-columns:1fr}.gallery{grid-template-columns:1fr}}
+
+    /* subtle animations */
+    .card, .hero-card, .proj, .fcard{transition:transform .28s cubic-bezier(.2,.9,.3,1),box-shadow .28s}
+    .proj:hover, .fcard:hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(4,20,36,0.6)}
+
+    /* gradient animated background */
+    .bg-visual{position:absolute;inset:0;z-index:-1;filter:blur(60px);opacity:0.25}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">EG</div>
+      <div>
+        <div style="font-weight:800">EduGuide — AI Learning Hub</div>
+        <div style="font-size:12px;color:var(--muted)">Modern hands-on AI & coding for students</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#learn">Learn</a>
+      <a href="#python">Python</a>
+      <a href="#projects">Projects</a>
+      <a href="#chat">Chat</a>
+    </nav>
+  </header>
+
+  <!-- animated background shapes -->
+  <div class="bg-visual" aria-hidden>
+    <svg width="0" height="0">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#6ee7b7"/></linearGradient>
+      </defs>
+    </svg>
+    <svg viewBox="0 0 800 400" preserveAspectRatio="none" style="width:100%;height:480px;display:block">
+      <g transform="translate(-120,-70) rotate(-6)">
+        <ellipse cx="420" cy="200" rx="420" ry="180" fill="url(#g1)" opacity="0.08"></ellipse>
+      </g>
+    </svg>
+  </div>
+
+  <main class="hero">
+    <div class="hero-card" data-aos="fade-up">
+      <span class="kicker">Interactive • Project-based • Free</span>
+      <h1>Teach AI Learning — Modern, hands-on classes for students</h1>
+      <div style="display:flex;gap:12px;align-items:center">
+        <p class="lead">Build websites, apps, chatbots, games & movie projects — with live practice and an AI tutor embedded on every page.</p>
+      </div>
+
+      <div style="display:flex;gap:14px;margin-top:12px;align-items:center">
+        <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent2),var(--accent1));display:flex;align-items:center;justify-content:center;font-weight:800;color:#04211a">AI</div>
+        <div>
+          <div style="font-weight:700">One place to teach everything</div>
+          <div style="color:var(--muted);font-size:14px">From basics to deploy — step-by-step modules and projects.</div>
+        </div>
+      </div>
+
+      <div class="features" style="margin-top:20px">
+        <div class="fcard" data-aos="fade-up" data-aos-delay="50">
+          <h4>Interactive Python</h4>
+          <p>Run Python code in-browser (Brython) and experiment live.</p>
+        </div>
+        <div class="fcard" data-aos="fade-up" data-aos-delay="120">
+          <h4>AI Chat Tutor</h4>
+          <p>Integrated chatbot answers student questions instantly.</p>
+        </div>
+        <div class="fcard" data-aos="fade-up" data-aos-delay="180">
+          <h4>Project Paths</h4>
+          <p>Clear paths for Website, App, Chatbot, Game & Film projects.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
+        <button class="btn" onclick="document.location='#projects'">Explore Projects</button>
+        <button class="btn secondary" onclick="document.location='#python'">Try Python</button>
+      </div>
+
+      <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+        <lottie-player src="https://assets1.lottiefiles.com/private_files/fe1b19f4-3a8c-4b1f-87a4-6b0f8f1a58dd.json" background="transparent" speed="1" style="width:120px;height:120px;" loop autoplay></lottie-player>
+
+        <div>
+          <div style="font-weight:700">Live Classroom</div>
+          <div style="color:var(--muted);font-size:13px">Students publish projects and receive feedback using the integrated chatbot.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <aside>
+      <div class="chat-wrapper card" id="chat">
+        <div class="chat-header">
+          <strong>EduGuide AI — Chat Tutor</strong>
+          <div style="font-size:12px;color:var(--muted)">Click the bubble to open floating chat, or use the embedded chat below.</div>
+        </div>
+
+        <!-- iframe placeholder: replace YOUR_CHATBOT_ID with your real ID -->
+        <iframe class="chat" id="embedChat" src="https://www.chatbase.co/chatbot-iframe/YOUR_CHATBOT_ID" title="EduGuide AI Chatbot"></iframe>
+      </div>
+    </aside>
+  </main>
+
+  <div class="container">
+    <!-- Python section -->
+    <section id="python" class="card" style="margin-top:20px" data-aos="fade-up">
+      <h2>Interactive Python — Run code in the browser</h2>
+      <p style="color:var(--muted)">This embedded runner uses Brython for lightweight Python execution. Perfect for teaching variables, loops and functions.</p>
+
+      <div class="python-run" style="margin-top:12px">
+        <textarea id="pycode" class="editor"># Hello students
+print('Hello from EduGuide!')
+
+for i in range(1,4):
+    print('Line', i)
+</textarea>
+
+        <div class="run-row">
+          <button class="btn" id="runBtn">Run</button>
+          <button class="btn secondary" id="resetBtn">Reset</button>
+          <div style="margin-left:auto;color:var(--muted);font-size:13px">Output:</div>
+        </div>
+
+        <pre id="output" class="output">(output will appear here)</pre>
+      </div>
+
+      <details style="margin-top:12px;color:var(--muted)"><summary>How it works</summary>
+        <p>We load Brython so students can run Python inside their browser. Brython is great for teaching but not for heavy ML workloads.</p>
+      </details>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" style="margin-top:20px" data-aos="fade-up">
+      <div class="card">
+        <h2>Projects & Paths</h2>
+        <p style="color:var(--muted)">Each path contains step-by-step modules and a classroom project.</p>
+
+        <div class="projects" style="margin-top:12px">
+          <div class="proj">
+            <h4>Website Path</h4>
+            <p style="color:var(--muted)">HTML → CSS → JS → Deploy on GitHub Pages</p>
+            <p style="margin-top:8px"><strong>Mini project:</strong> Student portfolio site with embedded chatbot.</p>
+          </div>
+
+          <div class="proj">
+            <h4>App Path</h4>
+            <p style="color:var(--muted)">Wireframe → No-code/Flutter → Test → Publish</p>
+            <p style="margin-top:8px"><strong>Mini project:</strong> Simple quiz app using local storage.</p>
+          </div>
+
+          <div class="proj">
+            <h4>Chatbot Path</h4>
+            <p style="color:var(--muted)">Intents → KB → Train → Embed</p>
+            <p style="margin-top:8px"><strong>Mini project:</strong> Classroom Q&A bot trained on course notes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section style="margin-top:20px" data-aos="fade-up">
+      <div class="card">
+        <h3>Learning Gallery</h3>
+        <div class="gallery" style="margin-top:12px">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1526378724708-4e9b0a6c78d1?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=8d1e7a7b1d0f3f7a6f5b1d3e0a6b8f6c" alt="students coding">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1555949963-aa79dcee981d?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=2f8b8a8d5c3c4e1a2c3d4e5f6a7b8c9d" alt="workshop">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d" alt="team project">
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources & CTA -->
+    <section style="margin-top:20px" data-aos="fade-up">
+      <div class="card">
+        <h3>Quick Resources</h3>
+        <ul style="color:var(--muted)">
+          <li>MDN — Web docs</li>
+          <li>Replit — online editor</li>
+          <li>Chatbase / Botpress — chatbot platforms</li>
+          <li>Canva — visuals & thumbnails</li>
+        </ul>
+        <div style="margin-top:12px">
+          <button class="btn" onclick="document.location='#learn'">Start Teaching</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    EduGuide © <span id="year"></span> · Replace the chatbot iframe src with your embed ID to enable the integrated tutor.
+  </footer>
+
+  <!-- Floating Chat Bubble (opens modal) -->
+  <div class="chat-bubble" id="chatBubble" title="Open chat">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="chat" />
+  </div>
+
+  <!-- Chat Modal -->
+  <div id="chatModal" style="display:none;position:fixed;right:20px;bottom:100px;width:420px;height:620px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);box-shadow:0 20px 60px rgba(2,8,20,0.7);z-index:100;background:linear-gradient(180deg,var(--glass-2),transparent)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.02)">
+      <strong>EduGuide AI</strong>
+      <button onclick="toggleChatModal()" class="btn secondary">Close</button>
+    </div>
+    <iframe id="modalChatIframe" src="https://www.chatbase.co/chatbot-iframe/YOUR_CHATBOT_ID" style="width:100%;height:100%;border:0"></iframe>
+  </div>
+
+  <!-- Brython for python runner -->
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.9.5/brython_stdlib.js"></script>
+
+  <script>
+    // Initialize AOS and typed effect
+    document.addEventListener('DOMContentLoaded',function(){
+      AOS.init({duration:700,once:true});
+      var typed = new Typed('.typing', {strings: ['Websites','Apps','Chatbots','Games','Movie Maker'],typeSpeed:60,backSpeed:30,loop:true});
+      document.getElementById('year').textContent = new Date().getFullYear();
+      // start brython
+      try{window.brython();}catch(e){console.warn('Brython failed',e)}
+    });
+
+    // Chat modal
+    const bubble = document.getElementById('chatBubble');
+    const modal = document.getElementById('chatModal');
+    bubble.addEventListener('click',toggleChatModal);
+    function toggleChatModal(){
+      if(modal.style.display==='none' || modal.style.display==='') modal.style.display='block'; else modal.style.display='none';
+    }
+
+    // Python runner using Brython
+    document.addEventListener('DOMContentLoaded',function(){
+      const runBtn = document.getElementById('runBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const editor = document.getElementById('pycode');
+      const output = document.getElementById('output');
+
+      runBtn.addEventListener('click',function(){
+        output.textContent = '';
+        const code = editor.value;
+        try{
+          __BRYTHON__.stdout = function(txt){ output.textContent += txt + '
+'; };
+          __BRYTHON__.stderr = function(txt){ output.textContent += '[ERR] ' + txt + '
+'; };
+          __BRYTHON__.run_script(code,'<stdin>');
+        }catch(err){ output.textContent = 'Error: ' + err.message }
+      });
+
+      resetBtn.addEventListener('click',function(){ editor.value = "# Hello students
+print('Hello from EduGuide!')
+
+for i in range(1,4):
+    print('Line', i)
+"; output.textContent='(output will appear here)'; });
+    });
+  </script>
+
+  <!-- AOS init -->
+  <script>AOS.init();</script>
+</body>
+</html>
